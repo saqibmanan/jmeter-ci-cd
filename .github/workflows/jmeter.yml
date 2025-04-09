@@ -18,13 +18,14 @@ jobs:
         run: |
           sudo apt-get update -y
           JMETER_VERSION="5.6.3"
-          sudo wget "https://downloads.apache.org/jmeter/binaries/apache-jmeter-${JMETER_VERSION}.tgz"
-          sudo tar -xzf "apache-jmeter-${JMETER_VERSION}.tgz"
+          wget "https://downloads.apache.org/jmeter/binaries/apache-jmeter-${JMETER_VERSION}.tgz"
+          tar -xzf "apache-jmeter-${JMETER_VERSION}.tgz"
+          echo "$PWD/apache-jmeter-${JMETER_VERSION}/bin" >> $GITHUB_PATH
 
       - name: Run JMeter Test Plan
         run: |
           mkdir -p report
-          jmeter -n -t IDS-DRR.jmx -l results.jtl -e -o report
+          jmeter -n -t IDS-DRR.jmx -l Load_test.jtl -e -o report
           ls -la report
 
       - name: Upload JMeter Report
