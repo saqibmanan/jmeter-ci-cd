@@ -1,0 +1,33 @@
+name: JMeter Test
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  run-jmeter:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Install JMeter
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y jmeter
+
+      - name: Run JMeter Test Plan
+        run: |
+          mkdir -p report
+          jmeter -n -t IDS-DRR.jmx -l results.jtl -e -o report
+          ls -la report
+
+      - name: Upload JMeter Report
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: jmeter-report
+          path: report/
